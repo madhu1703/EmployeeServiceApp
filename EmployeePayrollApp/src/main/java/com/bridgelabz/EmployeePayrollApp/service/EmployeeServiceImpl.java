@@ -54,7 +54,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
     @Override
     public void deleteEmployee(int id) {
-        log.info("Deleting employee with id: {}", id);
+        log.warn("Deleting employee with id: {}", id);
         repository.deleteById(id);
     }
 }
