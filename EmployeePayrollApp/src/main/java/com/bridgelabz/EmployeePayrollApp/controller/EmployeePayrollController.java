@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/employeepayrollservice")
+@CrossOrigin("*")
 public class EmployeePayrollController {
 
     @Autowired
@@ -23,8 +24,6 @@ public class EmployeePayrollController {
     public EmployeePayrollData getEmployee(@PathVariable int id) {
         return service.getEmployeeById(id);
     }
-
-
     @DeleteMapping("/delete/{id}")
     public String deleteEmployee(@PathVariable int id) {
         service.deleteEmployee(id);
