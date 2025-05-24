@@ -18,12 +18,18 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
     @Override
     public List<EmployeePayrollData> getAllEmployees() {
+        log.info("Fetching all employees");
         return repository.findAll();
     }
 
     @Override
     public EmployeePayrollData getEmployeeById(int id) {
-        return repository.findById(id).orElseThrow(() -> new RuntimeException("Employee not found"));
+        log.info("Fetching employee by id: {}", id);
+        return repository.findById(id)
+                .orElseThrow(() -> {
+                    log.error("Employee not found with id: {}", id);
+                    return new RuntimeException("Employee not found with id " + id);
+                });
     }
 
     @Override
@@ -32,7 +38,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
             log.error("Invalid employee name");
             throw new IllegalArgumentException("Employee name must not be empty");
         }
-        log.info("Creating employee in service: {}", dto);
+        log.info("Creating employee: {}", dto);
         EmployeePayrollData emp = new EmployeePayrollData(0, dto.getName(), dto.getSalary());
         return repository.save(emp);
     }
@@ -42,13 +48,14 @@ public class EmployeeServiceImpl implements IEmployeeService {
         EmployeePayrollData existing = getEmployeeById(id);
         existing.setName(dto.getName());
         existing.setSalary(dto.getSalary());
-        log.info("Updating employee with id {} to new values: {}", id, dto);
+        log.info("Updating employee with id {}: {}", id, dto);
         return repository.save(existing);
     }
 
     @Override
     public void deleteEmployee(int id) {
-        log.warn("Deleting employee with id {}", id);
+        log.info("Deleting employee with id: {}", id);
         repository.deleteById(id);
     }
 }
+
