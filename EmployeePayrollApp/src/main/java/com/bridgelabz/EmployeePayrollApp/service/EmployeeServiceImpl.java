@@ -2,6 +2,7 @@ package com.bridgelabz.EmployeePayrollApp.service;
 
 import com.bridgelabz.EmployeePayrollApp.dto.EmployeeDTO;
 import com.bridgelabz.EmployeePayrollApp.entity.EmployeePayrollData;
+import com.bridgelabz.EmployeePayrollApp.exception.EmployeePayrollException;
 import com.bridgelabz.EmployeePayrollApp.repository.EmployeeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +25,8 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
     @Override
     public EmployeePayrollData getEmployeeById(int id) {
-        log.info("Fetching employee by id: {}", id);
         return repository.findById(id)
-                .orElseThrow(() -> {
-                    log.error("Employee not found with id: {}", id);
-                    return new RuntimeException("Employee not found with id " + id);
-                });
+                .orElseThrow(() -> new EmployeePayrollException("Employee with ID " + id + " not found"));
     }
 
     @Override
@@ -58,4 +55,5 @@ public class EmployeeServiceImpl implements IEmployeeService {
         repository.deleteById(id);
     }
 }
+
 
